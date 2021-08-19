@@ -13,31 +13,19 @@ namespace demowebjob
             builder.ConfigureWebJobs(b =>
             {
                 b.AddAzureStorageCoreServices();
-                b.AddAzureStorage();
+                b.AddTimers();
             });
-            builder.ConfigureLogging((loggingBuilder) =>
+            builder.ConfigureLogging((context, b) =>
             {
-                loggingBuilder.AddConsole();
-            });
+                b.AddConsole();
 
+            });
             var host = builder.Build();
             using (host)
             {
                 host.Run();
             }
         }
-
-
-        public class Functions
-        {
-            public static void ProcessQueueMessage([QueueTrigger("my-queue")] string message, ILogger logger)
-            {
-                logger.LogInformation("START of Execution of your Web Job");
-                logger.LogInformation(message);
-                logger.LogInformation("END of Execution of your Web Job");
-            }
-        }
-
-
+        
     }
 }
