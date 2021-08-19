@@ -1,27 +1,20 @@
-﻿using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 
-namespace demowebjob
+namespace test
 {
-    public class Functions
+    class Program
     {
-        
-        //public static void Run([TimerTrigger("0 * * * * *")] TimerInfo myTimer, ILogger log)
-        //{
-
-        //    log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-        //    log.LogInformation("doing some job");
-        //}
-
-        public static void Run([TimerTrigger("0 * * * * *")] TimerInfo myTimer, ILogger log)
+        private ILogger log;
+        static void Main(string[] args)
         {
+            Console.WriteLine("Hello World!");
+
             string connString = "Server=tcp:achrafdprdemo.database.windows.net,1433;Initial Catalog=achrafdebfordapr;Persist Security Info=False;User ID=achraf;Password=KhH7Xql5;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            log.LogInformation("doing some job");
+            //log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            //log.LogInformation("doing some job");
+            Console.WriteLine($"C# Timer trigger function executed at: {DateTime.Now}");
 
             SqlConnection conn = new SqlConnection(connString);
 
@@ -38,7 +31,7 @@ namespace demowebjob
                 string time = System.DateTime.Now.ToString();
                 using (SqlConnection connection = new SqlConnection(connString))
                 {
-              
+
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(insert, connection))
                     {
@@ -46,10 +39,12 @@ namespace demowebjob
                         command.Parameters.AddWithValue("@time", time);
                         command.ExecuteNonQuery();
                         command.Dispose();
-                        
+
                     }
                     conn.Close();
                 }
+
+                Console.WriteLine($"C# Timer trigger function end executed at: {DateTime.Now}");
 
 
 
@@ -69,7 +64,7 @@ namespace demowebjob
                 //adapter.InsertCommand = new SqlCommand(sql, conn);
                 //adapter.InsertCommand.ExecuteNonQuery();
 
-       
+
 
 
 
@@ -80,10 +75,15 @@ namespace demowebjob
                 Console.WriteLine("Error: " + e.Message);
             }
 
-            Console.Read();
+           
+            Console.WriteLine("All Records inserted Successfully");
+
+            // Console.Read();
+
+            // wait 2 seconds before closing Console Application
+            System.Threading.Thread.Sleep(2000);
 
 
         }
     }
-
 }
